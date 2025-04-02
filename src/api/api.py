@@ -407,4 +407,4 @@ async def add_comment(
     return {"message": "Kommentar erfolgreich hinzugefügt"}
 
 if __name__ == "__main__":
-    uvicorn.run("api:app", host="0.0.0.0", port=8080, reload=False)
+    uvicorn.run("api:app", host="0.0.0.0", port=8080, reload=True)
