@@ -1,0 +1,25 @@
+[project]
+name = "Vibe Coding Demo Project"
+version = "0.1.0"
+description = "enter useful description here"
+authors = [
+    {name = "tagaia", email = "kontakt@tagaia.de"},
+]
+dependencies = [
+    "fastapi==0.115.0",
+    "pydantic>=2.9.2",
+    "uvicorn[standard]==0.31.0",
+    "passlib>=1.7.4",
+    "SQLAlchemy>=2.0.37",
+    "python-jose>=3.3.0",
+    "python-multipart>=0.0.20",
+    "bcrypt>=4.2.1",
+]
+
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "Closed Source"}
+
+
+[tool.pdm]
+distribution = false
