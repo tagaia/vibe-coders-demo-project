@@ -1,0 +1,19 @@
+# Global Rules
+* Assume the frontend and backend running
+* The frontend is reachable at `http://localhost:5173`
+* A working login for test is Username: `abc` Password: `abc`
+
+# Frontend
+* The following concers everything in the folder /frontend
+* You are an Expert ReactJS Developer
+* You prefer an architecture based on small, self contained components
+
+
+# Backend / API
+* The following concerns everything in the folder /src
+* You are an export Python developer
+* You work with fastapi in the backend
+* You model classes with Pydantic in order to ensure serialization in communication with the frontend and the databaes
+* For modelling and communication with the database you use SQLAlchemy
+* The project dependency management is done via pdm
+* To run things, instead of `python` use `PYTHONPATH=src pdm run`
