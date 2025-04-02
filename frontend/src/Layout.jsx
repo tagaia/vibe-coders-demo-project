@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom';
 import { useAuth } from './App';
+import { useViewport } from './components/ViewportProvider';
+import ViewportContainer from './components/ViewportContainer';
 
 export default function Layout() {
   const auth = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { is4K, width } = useViewport();
+
+  // Calculate responsive sizes based on viewport
+  const logoHeight = is4K ? 'h-16' : 'h-12';
+  const headerPadding = is4K ? 'py-6 px-8' : 'py-4 px-4';
+  const menuButtonSize = is4K ? 'w-8 h-8' : 'w-6 h-6';
+  const menuWidth = is4K ? 'w-64' : 'w-48';
+  const menuFontSize = is4K ? 'text-base' : 'text-sm';
 
   return (
-    <div className="min-h-screen bg-white w-full grid grid-rows-[auto_1fr]">
+    <ViewportContainer className="min-h-screen bg-white w-full grid grid-rows-[auto_1fr]">
       <header className="bg-white shadow-sm">
-        <div className="w-full px-4 py-4 flex justify-between items-center">
+        <div className={`w-full ${headerPadding} flex justify-between items-center`}>
           <div className="w-full">
             <Link to="/">
               <img
                 src="/logo.png"
                 alt="Logo"
-                className="h-12 w-full object-contain"
+                className={`${logoHeight} w-full object-contain`}
               />
             </Link>
           </div>
@@ -36,7 +46,7 @@ export default function Layout() {
                     className="p-2 bg-black hover:bg-gray-800 rounded-full transition-colors"
                   >
                     <svg 
-                      className="w-6 h-6 text-white" 
+                      className={`${menuButtonSize} text-white`}
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
@@ -50,13 +60,13 @@ export default function Layout() {
                     </svg>
                   </button>
                   {isMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-black rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
+                    <div className={`absolute right-0 mt-2 ${menuWidth} bg-black rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5`}>
                       <button
                         onClick={() => {
                           navigate('/');
                           setIsMenuOpen(false);
                         }}
-                        className="block w-full px-4 py-2 text-sm text-white hover:bg-gray-800 text-left"
+                        className={`block w-full px-4 py-2 ${menuFontSize} text-white hover:bg-gray-800 text-left`}
                       >
                         Dashboard
                       </button>
@@ -65,7 +75,7 @@ export default function Layout() {
                           navigate('/suche');
                           setIsMenuOpen(false);
                         }}
-                        className="block w-full px-4 py-2 text-sm text-white hover:bg-gray-800 text-left"
+                        className={`block w-full px-4 py-2 ${menuFontSize} text-white hover:bg-gray-800 text-left`}
                       >
                         Suche
                       </button>
@@ -74,16 +84,25 @@ export default function Layout() {
                           navigate('/uebersicht');
                           setIsMenuOpen(false);
                         }}
-                        className="block w-full px-4 py-2 text-sm text-white hover:bg-gray-800 text-left"
+                        className={`block w-full px-4 py-2 ${menuFontSize} text-white hover:bg-gray-800 text-left`}
                       >
                         Übersicht
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate('/viewport-demo');
+                          setIsMenuOpen(false);
+                        }}
+                        className={`block w-full px-4 py-2 ${menuFontSize} text-white hover:bg-gray-800 text-left`}
+                      >
+                        4K Demo
                       </button>
                       <button
                         onClick={() => {
                           auth.signout(() => navigate('/'));
                           setIsMenuOpen(false);
                         }}
-                        className="block w-full px-4 py-2 text-sm text-white hover:bg-gray-800 text-left"
+                        className={`block w-full px-4 py-2 ${menuFontSize} text-white hover:bg-gray-800 text-left`}
                       >
                         Abmelden
                       </button>
@@ -98,6 +117,6 @@ export default function Layout() {
       <main className="w-full">
         <Outlet />
       </main>
-    </div>
+    </ViewportContainer>
   );
 }

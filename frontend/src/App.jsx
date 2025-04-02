@@ -1,5 +1,8 @@
 import React from 'react';
 import { Routes, Route, Navigate, useNavigate, Outlet, useLocation } from 'react-router-dom';
+import { ViewportProvider } from './components/ViewportProvider.jsx';
+import ViewportDebug from './components/ViewportDebug.jsx';
+import ViewportDemo from './components/ViewportDemo.jsx';
 import Anmeldebildschirm from './components/Anmeldebildschirm.jsx';
 import Registrierungsbildschirm from './components/Registrierungsbildschirm.jsx';
 import PasswortAendernBildschirm from './components/PasswortAendernBildschirm.jsx';
@@ -63,8 +66,10 @@ function RequireAuth({ children }) {
 // Hauptkomponente
 export default function App() {
   return (
-    <AuthProvider>
-      <Routes>
+    <ViewportProvider>
+      <AuthProvider>
+        <ViewportDebug />
+        <Routes>
         <Route element={<Layout />}>
           <Route
             path="/"
@@ -100,6 +105,13 @@ export default function App() {
               </RequireAuth>
             }
           />
+          {/* 4K Viewport Demo Route */}
+          <Route
+            path="/viewport-demo"
+            element={
+              <ViewportDemo />
+            }
+          />
           <Route
             path="/servicefall/:id"
             element={
@@ -117,7 +129,8 @@ export default function App() {
             }
           />
         </Route>
-      </Routes>
-    </AuthProvider>
+        </Routes>
+      </AuthProvider>
+    </ViewportProvider>
   );
 }
