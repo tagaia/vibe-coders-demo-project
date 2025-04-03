@@ -8,10 +8,11 @@ export default function Suchbildschirm() {
   const [error, setError] = useState('');
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [selectedPriorities, setSelectedPriorities] = useState([]);
+  const [selectedTicketTypes, setSelectedTicketTypes] = useState([]);
 
   useEffect(() => {
     const searchServicefaelle = async () => {
-      if (!searchTerm.trim() && selectedStatuses.length === 0 && selectedPriorities.length === 0) {
+      if (!searchTerm.trim() && selectedStatuses.length === 0 && selectedPriorities.length === 0 && selectedTicketTypes.length === 0) {
         setResults([]);
         return;
       }
@@ -27,6 +28,10 @@ export default function Suchbildschirm() {
         });
         selectedPriorities.forEach(priority => {
           queryParams.append('priority', priority);
+        });
+        
+        selectedTicketTypes.forEach(type => {
+          queryParams.append('ticket_type', type);
         });
         
         const response = await fetch(
@@ -54,7 +59,7 @@ export default function Suchbildschirm() {
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [searchTerm, selectedStatuses, selectedPriorities]);
+  }, [searchTerm, selectedStatuses, selectedPriorities, selectedTicketTypes]);
 
   return (
     <div className="flex-grow p-8 w-full">
@@ -67,7 +72,7 @@ export default function Suchbildschirm() {
           placeholder="Suchbegriff eingeben..."
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
         />
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-gray-700 font-medium mb-2">Status:</label>
             <select
@@ -100,6 +105,22 @@ export default function Suchbildschirm() {
               ))}
             </select>
           </div>
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Ticket-Typ:</label>
+            <select
+              multiple
+              value={selectedTicketTypes}
+              onChange={(e) => {
+                const options = Array.from(e.target.selectedOptions, option => option.value);
+                setSelectedTicketTypes(options);
+              }}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-black"
+            >
+              {['Frontend', 'Backend'].map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
       
@@ -117,9 +138,10 @@ export default function Suchbildschirm() {
             </Link>
             <p className="text-gray-600">Status: {fall.zustand}</p>
             <p className="text-gray-600">Priorität: {fall.prioritaet}</p>
+            <p className="text-gray-600">Typ: {fall.ticket_type || 'Nicht angegeben'}</p>
           </div>
         ))}
-        {!isLoading && results.length === 0 && (searchTerm.trim() || selectedStatuses.length > 0 || selectedPriorities.length > 0) && (
+        {!isLoading && results.length === 0 && (searchTerm.trim() || selectedStatuses.length > 0 || selectedPriorities.length > 0 || selectedTicketTypes.length > 0) && (
           <p className="text-gray-600">Keine Ergebnisse gefunden</p>
         )}
       </div>

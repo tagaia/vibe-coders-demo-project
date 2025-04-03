@@ -22,6 +22,7 @@ const ServicefallCard = ({ servicefall }) => {
     >
       <h3 className="font-semibold text-gray-800">{servicefall.titel}</h3>
       <p className="text-gray-600">Priorität: {servicefall.prioritaet}</p>
+      <p className="text-gray-600">Typ: {servicefall.ticket_type || 'Nicht angegeben'}</p>
     </div>
   );
 };

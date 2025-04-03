@@ -49,6 +49,7 @@ class ServicefallDB(Base):
     beschreibung = Column(String(1000), nullable=False)
     prioritaet = Column(String(50), nullable=False)
     zustand = Column(String(50), nullable=False, default="Offen")
+    ticket_type = Column(String(50), nullable=False, default="Backend")  # Neues Feld: Frontend oder Backend
     erstellt_am = Column(DateTime, default=datetime.now(timezone(timedelta(hours=1))))
     benutzer_id = Column(Integer, ForeignKey("benutzer.id"))
     benutzer = relationship("BenutzerDB", back_populates="servicefaelle")
@@ -71,13 +72,15 @@ class ServicefallErstellung(BaseModel):
     titel: str
     beschreibung: str
     prioritaet: str
+    ticket_type: str  # Neues Feld: "Frontend" oder "Backend"
 
     class Config:
         schema_extra = {
             "example": {
                 "titel": "Titel des Servicefalls",
                 "beschreibung": "Beschreibung des Servicefalls",
-                "prioritaet": "Niedrig"
+                "prioritaet": "Niedrig",
+                "ticket_type": "Backend"
             }
         }
 
@@ -103,6 +106,7 @@ class ServicefallResponse(BaseModel):
     beschreibung: str
     prioritaet: str
     zustand: str
+    ticket_type: str  # Neues Feld hinzugefügt
     erstellt_am: datetime
     benutzer_id: int
     comments: list[CommentResponse] = []
@@ -297,10 +301,17 @@ async def servicefall_erstellen(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Ungültige Priorität. Erlaubte Werte: Niedrig, Mittel, Hoch"
         )
+    
+    if servicefall.ticket_type not in ["Frontend", "Backend"]:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Ungültiger Ticket-Typ. Erlaubte Werte: Frontend, Backend"
+        )
     neuer_servicefall = ServicefallDB(
         titel=servicefall.titel,
         beschreibung=servicefall.beschreibung,
         prioritaet=servicefall.prioritaet,
+        ticket_type=servicefall.ticket_type,
         benutzer_id=current_user.id
     )
     db.add(neuer_servicefall)
@@ -330,6 +341,7 @@ async def suche_servicefaelle(
     q: Optional[str] = None,
     status: Optional[List[str]] = Query(None),
     priority: Optional[List[str]] = Query(None),
+    ticket_type: Optional[List[str]] = Query(None),
     db: Session = Depends(get_db),
     current_user: BenutzerDB = Depends(get_current_user)
 ):
@@ -348,6 +360,9 @@ async def suche_servicefaelle(
     
     if priority:
         conditions.append(ServicefallDB.prioritaet.in_(priority))
+        
+    if ticket_type:
+        conditions.append(ServicefallDB.ticket_type.in_(ticket_type))
     
     if conditions:
         query = query.filter(and_(*conditions))

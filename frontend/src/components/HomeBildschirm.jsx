@@ -6,6 +6,7 @@ export default function HomeBildschirm() {
     titel: '',
     beschreibung: '',
     prioritaet: '',
+    ticket_type: '',
   });
   const [meineServicefaelle, setMeineServicefaelle] = useState([]);
   const [fehler, setFehler] = useState('');
@@ -138,6 +139,26 @@ export default function HomeBildschirm() {
                 <option value="Hoch">Hoch</option>
               </select>
             </div>
+            <div>
+              <label className="block text-gray-700 font-medium">
+                Ticket-Typ:
+              </label>
+              <select
+                value={servicefall.ticket_type}
+                onChange={(e) =>
+                  setServicefall({
+                    ...servicefall,
+                    ticket_type: e.target.value,
+                  })
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-black"
+                required
+              >
+                <option value="">Bitte auswählen</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Backend">Backend</option>
+              </select>
+            </div>
             <button
               type="submit"
               disabled={isLadeend}
@@ -167,6 +188,7 @@ export default function HomeBildschirm() {
                     </Link>
                   </h3>
                   <p className="text-gray-600">Status: {fall.zustand}</p>
+                  <p className="text-gray-600">Typ: {fall.ticket_type || 'Nicht angegeben'}</p>
                 </li>
               ))}
             </ul>

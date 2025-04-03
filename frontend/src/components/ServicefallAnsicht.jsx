@@ -123,6 +123,7 @@ export default function ServicefallAnsicht() {
           </h2>
           <p className="text-gray-700 mb-4">{servicefall.beschreibung}</p>
           <p className="text-gray-600">Priorität: {servicefall.prioritaet}</p>
+          <p className="text-gray-600">Ticket-Typ: {servicefall.ticket_type}</p>
           <div className="mt-4">
             <label className="block text-gray-700 font-medium mb-2">Status:</label>
             <select
