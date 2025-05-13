@@ -1,11 +1,5 @@
 {
   "mcpServers": {
-    // "math-server": {
-    //   "command": "node",
-    //   "args": ["/home/jbrusch/.local/share/Roo-Code/MCP/math-server/build/index.js"],
-    //   "disabled": false,
-    //   "alwaysAllow": []
-    // },
     "Context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
