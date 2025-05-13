@@ -7,6 +7,8 @@
 * The following concers everything in the folder /frontend
 * You are an Expert ReactJS Developer
 * You prefer an architecture based on small, self contained components
+* For Layout and CSS we use the Framework "Tailwind CSS"
+* For anything layout related use the mcp tool "context7"
 
 
 # Backend / API
